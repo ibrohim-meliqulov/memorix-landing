@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 const BOT_URL = 'https://t.me/memorix_uz_bot'
+const AUTH_URL = '/auth'
 const APP_URL = 'https://memorix-front.vercel.app'
 
 const features = [
@@ -103,7 +104,7 @@ function Nav() {
           ))}
         </div>
 
-        <a href={BOT_URL} target="_blank" rel="noopener noreferrer" style={{
+        <a href={AUTH_URL} style={{
           background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
           color: 'white', fontSize: 14, fontWeight: 600,
           padding: '9px 20px', borderRadius: 8, textDecoration: 'none',
@@ -150,7 +151,7 @@ function Hero() {
           </p>
 
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 48 }}>
-            <a href={BOT_URL} target="_blank" rel="noopener noreferrer" style={{
+            <a href={AUTH_URL} style={{
               background: 'linear-gradient(135deg, #2563eb, #1d4ed8)', color: 'white',
               fontWeight: 700, padding: '14px 28px', borderRadius: 10, textDecoration: 'none',
               fontSize: 15, display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -275,7 +276,7 @@ function Pricing() {
       name: 'Free', price: '0', period: "so'm / oy — abadiy",
       features: ["3 ta to'plam", "30 ta so'z", 'AI flashcard', '3 ta til', 'Flip kartalar', 'Quiz'],
       missing: ['Statistika', 'Spaced rep.', 'Ustuvorlik'],
-      cta: 'Bepul boshlash', href: BOT_URL, style: 'outline',
+      cta: 'Bepul boshlash', href: AUTH_URL, style: 'outline',
     },
     {
       name: '⚡ Starter',
@@ -440,13 +441,13 @@ function CTA() {
             AI bilan flashcard yarating. Bepul. Telegram orqali. Hoziroq.
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href={BOT_URL} target="_blank" rel="noopener noreferrer" style={{
+            <a href={AUTH_URL} style={{
               background: 'linear-gradient(135deg, #2563eb, #1d4ed8)', color: 'white',
               fontWeight: 700, padding: '14px 28px', borderRadius: 10, textDecoration: 'none',
               fontSize: 15, display: 'inline-flex', alignItems: 'center', gap: 8,
               boxShadow: '0 8px 24px rgba(37,99,235,0.35)',
             }}>
-              🚀 Telegram botni ochish
+              🚀 Bepul boshlash
             </a>
             <a href={APP_URL} target="_blank" rel="noopener noreferrer" style={{
               color: '#2563eb', fontWeight: 600, padding: '14px 28px', borderRadius: 10,
