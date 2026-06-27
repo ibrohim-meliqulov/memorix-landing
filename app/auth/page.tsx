@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 const BACKEND = 'https://memorix-r9gk.onrender.com'
@@ -16,13 +16,12 @@ function CardLogo({ size = 28 }: { size?: number }) {
     )
 }
 
-export default function AuthPage() {
+function AuthContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const [loading, setLoading] = useState(false)
     const [botStep, setBotStep] = useState(false)
 
-    // URL dan token kelsa — app ga redirect
     useEffect(() => {
         const token = searchParams.get('token')
         const error = searchParams.get('error')
@@ -30,9 +29,7 @@ export default function AuthPage() {
             localStorage.setItem('memorix_token', token)
             router.push('/app')
         }
-        if (error) {
-            console.error('Auth xatolik:', error)
-        }
+        if (error) console.error('Auth xatolik:', error)
     }, [searchParams, router])
 
     function handleGoogle() {
@@ -51,13 +48,11 @@ export default function AuthPage() {
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             padding: '20px', fontFamily: 'Inter, system-ui, sans-serif',
         }}>
-            {/* Logo */}
             <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none', marginBottom: 32 }}>
                 <CardLogo size={32} />
                 <span style={{ fontSize: 20, fontWeight: 800, color: '#1e3a8a' }}>Memorix</span>
             </a>
 
-            {/* Card */}
             <div style={{
                 background: 'white', borderRadius: 20, padding: '40px 36px',
                 maxWidth: 400, width: '100%',
@@ -76,20 +71,14 @@ export default function AuthPage() {
 
                 {!botStep ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-
-                        {/* Google */}
                         <button onClick={handleGoogle} disabled={loading} style={{
                             width: '100%', padding: '13px 20px', borderRadius: 10,
                             border: '1.5px solid #e2e8f0', background: loading ? '#f8faff' : 'white',
                             cursor: loading ? 'not-allowed' : 'pointer',
                             fontSize: 15, fontWeight: 600, color: '#0f172a',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                            transition: 'all 0.15s', fontFamily: 'inherit',
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                        }}
-                            onMouseEnter={e => { if (!loading) e.currentTarget.style.borderColor = '#2563eb' }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#e2e8f0' }}
-                        >
+                            fontFamily: 'inherit', boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                        }}>
                             {loading ? (
                                 <div style={{ width: 20, height: 20, border: '2px solid #e2e8f0', borderTopColor: '#2563eb', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
                             ) : (
@@ -103,71 +92,62 @@ export default function AuthPage() {
                             {loading ? 'Yuklanmoqda...' : 'Google bilan kiring'}
                         </button>
 
-                        {/* Divider */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '4px 0' }}>
                             <div style={{ flex: 1, height: 1, background: '#e2e8f0' }} />
-                            <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 500 }}>yoki</span>
+                            <span style={{ fontSize: 12, color: '#94a3b8' }}>yoki</span>
                             <div style={{ flex: 1, height: 1, background: '#e2e8f0' }} />
                         </div>
 
-                        {/* Telegram bot */}
                         <button onClick={handleBot} style={{
                             width: '100%', padding: '13px 20px', borderRadius: 10,
                             border: '1.5px solid #e2e8f0', background: 'white',
                             cursor: 'pointer', fontSize: 15, fontWeight: 600, color: '#0f172a',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                             fontFamily: 'inherit', boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                        }}
-                            onMouseEnter={e => { e.currentTarget.style.borderColor = '#0ea5e9' }}
-                            onMouseLeave={e => { e.currentTarget.style.borderColor = '#e2e8f0' }}
-                        >
+                        }}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="#0ea5e9">
                                 <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" />
                             </svg>
                             Telegram bot orqali
                         </button>
-
                     </div>
                 ) : (
-                    /* Bot step */
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: 56, marginBottom: 16 }}>📱</div>
-                        <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: '#0f172a' }}>
-                            Telegram ochildi!
-                        </h2>
+                        <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8, color: '#0f172a' }}>Telegram ochildi!</h2>
                         <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, marginBottom: 20 }}>
-                            Telegram'da <strong>START</strong> tugmasini bosing.<br />
-                            Bot sizga kirish havolasini yuboradi.
+                            Telegram'da <strong>START</strong> tugmasini bosing.
                         </p>
                         <a href={BOT_URL} target="_blank" rel="noopener noreferrer" style={{
                             display: 'block', padding: '12px', borderRadius: 10,
                             background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
-                            color: 'white', textDecoration: 'none', fontWeight: 700, fontSize: 14,
-                            marginBottom: 12,
-                        }}>
-                            📱 Botni ochish →
-                        </a>
+                            color: 'white', textDecoration: 'none', fontWeight: 700, fontSize: 14, marginBottom: 12,
+                        }}>📱 Botni ochish →</a>
                         <button onClick={() => setBotStep(false)} style={{
-                            background: 'none', border: 'none', color: '#94a3b8',
-                            fontSize: 13, cursor: 'pointer', fontFamily: 'inherit',
-                        }}>
-                            ← Orqaga
-                        </button>
+                            background: 'none', border: 'none', color: '#94a3b8', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit',
+                        }}>← Orqaga</button>
                     </div>
                 )}
 
                 <p style={{ textAlign: 'center', fontSize: 12, color: '#94a3b8', marginTop: 24, lineHeight: 1.5 }}>
-                    Kirib, siz{' '}
-                    <a href="#" style={{ color: '#2563eb' }}>Foydalanish shartlari</a>
-                    {' '}va{' '}
-                    <a href="#" style={{ color: '#2563eb' }}>Maxfiylik siyosati</a>
-                    {' '}ga rozilik bildirasiz.
+                    Kirib, siz foydalanish shartlariga rozilik bildirasiz.
                 </p>
             </div>
-
-            <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
+    )
+}
+
+// ← Asosiy export — Suspense bilan wrap qilingan
+export default function AuthPage() {
+    return (
+        <Suspense fallback={
+            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f4ff' }}>
+                <div style={{ width: 32, height: 32, border: '3px solid #e2e8f0', borderTopColor: '#2563eb', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+        }>
+            <AuthContent />
+        </Suspense>
     )
 }
