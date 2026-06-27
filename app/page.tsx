@@ -5,188 +5,190 @@ import { useState } from 'react'
 const BOT_URL = 'https://t.me/memorix_uz_bot'
 const APP_URL = 'https://memorix-front.vercel.app'
 
-// ── DATA ──────────────────────────────────────────────────────
 const features = [
-  {
-    icon: '✨',
-    color: 'from-purple-600 to-purple-400',
-    title: 'AI bilan flashcard',
-    desc: 'Matn yoki rasm yuboring — AI o\'zi muhim so\'zlarni ajratib, tarjima va misol jumla yozadi. Bir zumda 15 ta so\'z!',
-  },
-  {
-    icon: '🔄',
-    color: 'from-blue-500 to-indigo-500',
-    title: '3D Flip kartalar',
-    desc: 'So\'zni ko\'ring, bosing — orqasida tarjima va misol gap chiqadi. Miya yaxshi eslab qoladi!',
-  },
-  {
-    icon: '🎮',
-    color: 'from-green-500 to-teal-500',
-    title: 'Quiz rejimi',
-    desc: '4 ta variant yoki yozish orqali bilimingizni sinab ko\'ring. Ko\'p tanlov va typing — ikkalasi ham bor.',
-  },
-  {
-    icon: '📊',
-    color: 'from-pink-500 to-purple-500',
-    title: 'Statistika & Streak',
-    desc: 'Ketma-ket kunlar, haftalik grafik, jami o\'rganilgan so\'zlar. Duolingo kabi — motivatsiya oshadi!',
-  },
-  {
-    icon: '🌐',
-    color: 'from-amber-500 to-orange-500',
-    title: '3 ta o\'rganish tili',
-    desc: 'Inglizcha, ruscha va koreycha — har biri uchun alohida to\'plam. Yana yangi tillar qo\'shilmoqda.',
-  },
-  {
-    icon: '🔊',
-    color: 'from-teal-500 to-cyan-500',
-    title: 'Talaffuz',
-    desc: 'Har bir so\'zning to\'g\'ri talaffuzini eshiting. Ingliz tili uchun Dictionary API, boshqalar uchun TTS.',
-  },
+  { icon: '✨', title: 'AI bilan flashcard', desc: 'Matn yoki rasm yuboring — AI o\'zi so\'zlarni ajratib, tarjima va misol jumla yozadi.' },
+  { icon: '🔄', title: 'Flip kartalar', desc: 'So\'zni ko\'ring, bosing — orqasida tarjima chiqadi. Oddiy va samarali.' },
+  { icon: '🎮', title: 'Quiz rejimi', desc: '4 ta variant yoki yozish orqali bilimingizni sinab ko\'ring.' },
+  { icon: '📊', title: 'Statistika', desc: 'Ketma-ket kunlar, haftalik grafik va jami o\'rganilgan so\'zlar.' },
+  { icon: '🌐', title: '3 ta til', desc: 'Inglizcha, ruscha va koreycha — har biri uchun alohida to\'plam.' },
+  { icon: '🔊', title: 'Talaffuz', desc: 'Har bir so\'zning to\'g\'ri talaffuzini eshiting.' },
 ]
 
 const steps = [
-  { num: '1', title: 'Telegram botni oching', desc: '@memorix_uz_bot ga /start yuboring. Bir zumda ro\'yxatdan o\'tiladi.' },
-  { num: '2', title: 'To\'plam yarating', desc: 'Matn yozing yoki rasm yuklang — AI o\'zi so\'zlarni ajratadi va flashcard yaratadi.' },
-  { num: '3', title: 'O\'rganishni boshlang', desc: 'Flip kartalar yoki Quiz rejimida o\'rganing. Kunlik streak saqlang!' },
-  { num: '4', title: 'Natijani ko\'ring', desc: 'Statistika sahifasida haftalik progress va jami o\'rganilgan so\'zlarni kuzating.' },
+  { num: '1', title: 'Botni oching', desc: '@memorix_uz_bot ga /start yuboring.' },
+  { num: '2', title: 'To\'plam yarating', desc: 'Matn yoki rasm yuboring — AI flashcard yaratadi.' },
+  { num: '3', title: 'O\'rganing', desc: 'Flip kartalar yoki Quiz bilan o\'rganing.' },
+  { num: '4', title: 'Natijani kuzating', desc: 'Statistika va streak bilan motivatsiyangizni saqlang.' },
 ]
 
 const faqs = [
-  {
-    q: 'Memorix bepulmi?',
-    a: 'Ha! Bepul rejada 3 ta to\'plam va 30 ta so\'z yaratish mumkin. Bu boshlash uchun yetarli. Keyinchalik Starter (9,900 so\'m) yoki Premium (29,900 so\'m) rejaga o\'tish mumkin.',
-  },
-  {
-    q: 'AI qanday ishlaydi?',
-    a: 'Siz inglizcha matn yoki rasm yuborasiz — AI (Google Gemini) o\'zi muhim so\'zlarni ajratib, o\'zbek tiliga tarjima qiladi va misol jumla yozadi. Bir bosishda 15 ta so\'z!',
-  },
-  {
-    q: 'Qaysi tillarni o\'rganish mumkin?',
-    a: 'Hozirda inglizcha, ruscha va koreycha. Yana yangi tillar qo\'shilmoqda. O\'zbek tili ham tez orada!',
-  },
-  {
-    q: 'Quiz rejimi qanday ishlaydi?',
-    a: 'Ikki rejim bor: Ko\'p tanlov (4 variant) va Yozish (o\'zingiz tarjimasini yozasiz). Aralash rejimda ikkalasi ham bo\'ladi. Natijada necha foiz to\'g\'ri ekaningizni ko\'rasiz.',
-  },
-  {
-    q: 'Spaced repetition bormi?',
-    a: 'Ha, Premium rejada SM-2 algoritmi asosida spaced repetition ishlaydi. Bu eng samarali eslab qolish usuli — faqat unutmoq bo\'lganda qaytib ko\'rsatadi.',
-  },
-  {
-    q: 'Saytdan ham foydalanish mumkinmi?',
-    a: 'Hozirda Telegram Mini App orqali ishlaydi. Tez orada to\'liq web versiya ham chiqadi!',
-  },
+  { q: 'Memorix bepulmi?', a: 'Ha! Bepul rejada 3 ta to\'plam va 30 ta so\'z. Starter (9,900 so\'m) va Premium (29,900 so\'m) rejalar ham mavjud.' },
+  { q: 'AI qanday ishlaydi?', a: 'Siz matn yoki rasm yuborasiz — AI o\'zi muhim so\'zlarni ajratib, o\'zbek tiliga tarjima qiladi va misol jumla yozadi.' },
+  { q: 'Qaysi tillarni o\'rganish mumkin?', a: 'Hozirda inglizcha, ruscha va koreycha. Yangi tillar qo\'shilmoqda.' },
+  { q: 'Quiz rejimi qanday?', a: '4 ta variant yoki yozish rejimi. Aralash rejimda ikkalasi ham bo\'ladi.' },
+  { q: 'Spaced repetition bormi?', a: 'Ha, Premium rejada SM-2 algoritmi asosida spaced repetition ishlaydi.' },
+  { q: 'Saytdan ham foydalanish mumkinmi?', a: 'Hozirda Telegram Mini App orqali ishlaydi. Tez orada web versiya ham chiqadi.' },
 ]
 
-const planFeatures = {
-  free:    ['3 ta to\'plam', '30 ta so\'z', 'AI flashcard', '3 ta til', 'Flip kartalar'],
-  starter: ['10 ta to\'plam', '100 ta so\'z', 'AI flashcard', '3 ta til', 'Flip kartalar', 'Statistika', 'Quiz rejimi'],
-  premium: ['Cheksiz to\'plam', 'Cheksiz so\'z', 'AI flashcard', '3 ta til', 'Flip kartalar', 'Statistika', 'Quiz rejimi', 'Spaced repetition', 'Ustuvorlik'],
+// ── LOGO ──────────────────────────────────────────────────────
+function CardLogo({ size = 28 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="5" width="18" height="13" rx="3" fill="url(#g1)" opacity="0.5" />
+      <rect x="6" y="9" width="18" height="13" rx="3" fill="url(#g2)" />
+      <text x="15" y="19" fontSize="7" fontWeight="bold" fill="white" textAnchor="middle">Aa</text>
+      <defs>
+        <linearGradient id="g1" x1="2" y1="5" x2="20" y2="18" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#60a5fa" />
+          <stop offset="1" stopColor="#3b82f6" />
+        </linearGradient>
+        <linearGradient id="g2" x1="6" y1="9" x2="24" y2="22" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#2563eb" />
+          <stop offset="1" stopColor="#1d4ed8" />
+        </linearGradient>
+      </defs>
+    </svg>
+  )
 }
 
-// ── COMPONENTS ────────────────────────────────────────────────
+// ── NAV ──────────────────────────────────────────────────────
 function Nav() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between"
-      style={{ background: 'rgba(8,0,26,0.8)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-      <a href="#" className="flex items-center gap-2">
-        <div className="w-3 h-3 rounded-full" style={{ background: '#a855f7', boxShadow: '0 0 16px #a855f7' }}></div>
-        <span className="text-xl font-extrabold tracking-tight">Memorix</span>
-      </a>
-      <div className="hidden md:flex items-center gap-8">
-        <a href="#features" className="text-sm text-white/60 hover:text-white transition-colors">Xususiyatlar</a>
-        <a href="#how" className="text-sm text-white/60 hover:text-white transition-colors">Qanday ishlaydi</a>
-        <a href="#pricing" className="text-sm text-white/60 hover:text-white transition-colors">Narxlar</a>
-        <a href="#faq" className="text-sm text-white/60 hover:text-white transition-colors">FAQ</a>
+    <nav style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50,
+      background: 'rgba(8, 16, 40, 0.85)',
+      backdropFilter: 'blur(16px)',
+      borderBottom: '1px solid rgba(255,255,255,0.08)',
+    }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px', height: 64, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Logo */}
+        <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
+          <CardLogo size={28} />
+          <span style={{ fontSize: 18, fontWeight: 700, color: 'white', letterSpacing: '-0.02em' }}>Memorix</span>
+        </a>
+
+        {/* Links */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }} className="nav-links">
+          {['#features:Xususiyatlar', '#how:Qanday ishlaydi', '#pricing:Narxlar', '#faq:FAQ'].map(item => {
+            const [href, label] = item.split(':')
+            return (
+              <a key={href} href={href} style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'white')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.6)')}>
+                {label}
+              </a>
+            )
+          })}
+        </div>
+
+        {/* CTA */}
+        <a href={BOT_URL} target="_blank" rel="noopener noreferrer" style={{
+          background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+          color: 'white', fontSize: 14, fontWeight: 600,
+          padding: '9px 20px', borderRadius: 8, textDecoration: 'none',
+          boxShadow: '0 4px 14px rgba(37,99,235,0.4)',
+          transition: 'opacity 0.2s',
+        }}>
+          Boshlash →
+        </a>
       </div>
-      <a href={BOT_URL} target="_blank" rel="noopener noreferrer"
-        className="btn-grad text-white text-sm font-bold px-5 py-2.5 rounded-full">
-        Boshlash →
-      </a>
     </nav>
   )
 }
 
+// ── HERO ──────────────────────────────────────────────────────
 function Hero() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center text-center px-5 pt-28 pb-20 relative">
-      {/* Orbs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="animate-drift1 absolute w-96 h-96 rounded-full -top-20 -left-20 opacity-30"
-          style={{ background: '#6C5CE7', filter: 'blur(80px)' }}></div>
-        <div className="animate-drift2 absolute w-80 h-80 rounded-full top-60 -right-20 opacity-25"
-          style={{ background: '#a855f7', filter: 'blur(80px)' }}></div>
-        <div className="animate-drift3 absolute w-64 h-64 rounded-full bottom-40 opacity-20"
-          style={{ background: '#0ea5e9', filter: 'blur(80px)', left: '35%' }}></div>
+    <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px', position: 'relative', overflow: 'hidden' }}>
+      {/* Subtle bg gradient */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: -100, left: '50%', transform: 'translateX(-50%)', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%)', filter: 'blur(40px)' }}></div>
       </div>
 
-      <div className="animate-fadeUp">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-7"
-          style={{ background: 'rgba(108,92,231,0.15)', border: '1px solid rgba(108,92,231,0.3)', color: '#c4b5fd' }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-purple-400 inline-block" style={{ boxShadow: '0 0 8px #a855f7' }}></span>
-          AI yordamida o&apos;rganish
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Badge */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px', borderRadius: 100, fontSize: 13, fontWeight: 600, marginBottom: 24, color: '#93c5fd', background: 'rgba(37,99,235,0.12)', border: '1px solid rgba(37,99,235,0.25)' }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#3b82f6', display: 'inline-block' }}></span>
+          AI yordamida flashcard yaratish
         </div>
-      </div>
 
-      <h1 className="animate-fadeUp delay-100 text-5xl md:text-7xl font-black tracking-tight leading-tight mb-6">
-        So&apos;zlarni{' '}
-        <span className="grad-text">10x tezroq</span>
-        <br />o&apos;rganing
-      </h1>
+        {/* Title */}
+        <h1 style={{ fontSize: 'clamp(36px, 6vw, 68px)', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: 20, color: 'white' }}>
+          So&apos;zlarni tez va oson{' '}
+          <span style={{ background: 'linear-gradient(135deg, #60a5fa, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            o&apos;rganing
+          </span>
+        </h1>
 
-      <p className="animate-fadeUp delay-200 text-lg md:text-xl text-white/55 max-w-lg leading-relaxed mb-10">
-        AI matn yoki rasmdan so&apos;zlarni o&apos;zi ajratadi. Siz faqat o&apos;rganing —
-        inglizcha, ruscha, koreycha. Telegram orqali bepul!
-      </p>
+        {/* Sub */}
+        <p style={{ fontSize: 18, color: 'rgba(255,255,255,0.55)', maxWidth: 520, margin: '0 auto 36px', lineHeight: 1.7 }}>
+          Matn yoki rasm yuboring — AI o&apos;zi muhim so&apos;zlarni ajratib flashcard yaratadi.
+          Inglizcha, ruscha, koreycha. Telegram orqali bepul.
+        </p>
 
-      <div className="animate-fadeUp delay-300 flex flex-col sm:flex-row gap-4 justify-center mb-14">
-        <a href={BOT_URL} target="_blank" rel="noopener noreferrer"
-          className="btn-grad text-white font-bold px-8 py-4 rounded-full text-lg flex items-center gap-2 justify-center">
-          🚀 Bepul boshlash
-        </a>
-        <a href={APP_URL} target="_blank" rel="noopener noreferrer"
-          className="glass text-white font-semibold px-8 py-4 rounded-full text-lg flex items-center gap-2 justify-center hover:bg-white/10 transition-colors">
-          📱 Mini App ni ochish
-        </a>
-      </div>
+        {/* CTAs */}
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 56 }}>
+          <a href={BOT_URL} target="_blank" rel="noopener noreferrer" style={{
+            background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+            color: 'white', fontWeight: 700, padding: '14px 28px',
+            borderRadius: 10, textDecoration: 'none', fontSize: 15,
+            boxShadow: '0 8px 24px rgba(37,99,235,0.35)',
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}>
+            🚀 Bepul boshlash
+          </a>
+          <a href={APP_URL} target="_blank" rel="noopener noreferrer" style={{
+            color: 'white', fontWeight: 600, padding: '14px 28px',
+            borderRadius: 10, textDecoration: 'none', fontSize: 15,
+            background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+          }}>
+            📱 Mini App
+          </a>
+        </div>
 
-      <div className="animate-fadeUp delay-400 flex gap-10 md:gap-16 justify-center flex-wrap">
-        {[
-          { num: '3', label: "O'rganish tili" },
-          { num: 'AI', label: 'Avtomatik flashcard' },
-          { num: '100%', label: 'Bepul boshlash' },
-          { num: '5+', label: "O'rganish rejimi" },
-        ].map((s) => (
-          <div key={s.label} className="text-center">
-            <div className="text-3xl font-extrabold grad-text">{s.num}</div>
-            <div className="text-xs text-white/40 mt-1">{s.label}</div>
-          </div>
-        ))}
+        {/* Stats */}
+        <div style={{ display: 'flex', gap: 48, justifyContent: 'center', flexWrap: 'wrap' }}>
+          {[
+            { num: '3', label: "O'rganish tili" },
+            { num: 'AI', label: 'Avtomatik flashcard' },
+            { num: 'Bepul', label: 'Boshlash' },
+            { num: '5+', label: "O'rganish rejimi" },
+          ].map(s => (
+            <div key={s.label} style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 26, fontWeight: 800, color: '#60a5fa' }}>{s.num}</div>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 4 }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )
 }
 
+// ── FEATURES ──────────────────────────────────────────────────
 function Features() {
   return (
-    <section id="features" className="py-24 px-5">
-      <div className="max-w-5xl mx-auto">
-        <div className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
-          style={{ background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.3)', color: '#c4b5fd' }}>
-          ✨ Xususiyatlar
+    <section id="features" style={{ padding: '80px 24px', background: 'rgba(255,255,255,0.02)' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ marginBottom: 48 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>Xususiyatlar</p>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10 }}>Hamma narsa bir joyda</h2>
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16, maxWidth: 400 }}>O&apos;rganishni qiziqarli va samarali qiladigan vositalar</p>
         </div>
-        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">Hamma narsa bir joyda</h2>
-        <p className="text-white/50 text-lg mb-14 max-w-md">O&apos;rganishni qiziqarli va samarali qiladigan barcha vositalar</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {features.map((f) => (
-            <div key={f.title} className="glass rounded-2xl p-7 card-hover">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center text-2xl mb-4 opacity-90`}>
-                {f.icon}
-              </div>
-              <h3 className="text-lg font-bold mb-2">{f.title}</h3>
-              <p className="text-white/50 text-sm leading-relaxed">{f.desc}</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
+          {features.map(f => (
+            <div key={f.title} style={{
+              background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+              borderRadius: 12, padding: '24px 24px',
+              transition: 'border-color 0.2s, transform 0.2s',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.3)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'translateY(0)' }}>
+              <div style={{ fontSize: 26, marginBottom: 12 }}>{f.icon}</div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, color: 'white' }}>{f.title}</h3>
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{f.desc}</p>
             </div>
           ))}
         </div>
@@ -195,30 +197,33 @@ function Features() {
   )
 }
 
+// ── HOW ──────────────────────────────────────────────────────
 function HowItWorks() {
   return (
-    <section id="how" className="py-24 px-5" style={{ background: 'rgba(255,255,255,0.02)' }}>
-      <div className="max-w-5xl mx-auto">
-        <div className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
-          style={{ background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.3)', color: '#c4b5fd' }}>
-          🎯 Jarayon
+    <section id="how" style={{ padding: '80px 24px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ marginBottom: 48 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>Jarayon</p>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 10 }}>Qanday ishlaydi?</h2>
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16 }}>4 ta oddiy qadam — va siz o&apos;rganishni boshladingiz</p>
         </div>
-        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">Qanday ishlaydi?</h2>
-        <p className="text-white/50 text-lg mb-14">4 ta oddiy qadam — va siz o&apos;rganishni boshladingiz</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 32 }}>
           {steps.map((s, i) => (
-            <div key={s.num} className="text-center relative">
-              {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-7 left-1/2 w-full h-px"
-                  style={{ background: 'linear-gradient(90deg, rgba(168,85,247,0.4), transparent)' }}></div>
-              )}
-              <div className="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center text-xl font-black relative z-10"
-                style={{ background: 'linear-gradient(135deg, #6C5CE7, #a855f7)', boxShadow: '0 8px 24px rgba(108,92,231,0.4)' }}>
+            <div key={s.num} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+              <div style={{
+                width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+                background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 16, fontWeight: 800, color: 'white',
+                boxShadow: '0 4px 14px rgba(37,99,235,0.3)',
+              }}>
                 {s.num}
               </div>
-              <h3 className="font-bold text-base mb-2">{s.title}</h3>
-              <p className="text-white/50 text-sm leading-relaxed">{s.desc}</p>
+              <div>
+                <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, color: 'white' }}>{s.title}</h3>
+                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{s.desc}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -227,151 +232,139 @@ function HowItWorks() {
   )
 }
 
+// ── PRICING ──────────────────────────────────────────────────
 function Pricing() {
   const [yearly, setYearly] = useState(false)
 
-  const prices = {
-    starter: yearly ? '6,930' : '9,900',
-    premium: yearly ? '20,930' : '29,900',
-    starterYear: '83,160',
-    premiumYear: '249,900',
-  }
+  const plans = [
+    {
+      name: 'Free', price: '0', period: "so'm / oy — abadiy",
+      features: ["3 ta to'plam", '30 ta so\'z', 'AI flashcard', '3 ta til', 'Flip kartalar'],
+      missing: ['Statistika', 'Quiz', 'Spaced rep.'],
+      cta: 'Bepul boshlash', href: BOT_URL, style: 'outline',
+    },
+    {
+      name: '⚡ Starter',
+      price: yearly ? '6,930' : '9,900',
+      period: yearly ? `so'm / oy · 83,160/yil` : "so'm / oy",
+      features: ["10 ta to'plam", "100 ta so'z", 'AI flashcard', '3 ta til', 'Flip kartalar', 'Statistika', 'Quiz'],
+      missing: ['Spaced rep.'],
+      cta: 'Starter olish', href: `${BOT_URL}?start=starter`, style: 'blue',
+    },
+    {
+      name: '👑 Premium',
+      price: yearly ? '20,930' : '29,900',
+      period: yearly ? `so'm / oy · 249,900/yil` : "so'm / oy",
+      features: ["Cheksiz to'plam", "Cheksiz so'z", 'AI flashcard', '3 ta til', 'Flip kartalar', 'Statistika', 'Quiz', 'Spaced rep.'],
+      missing: [],
+      cta: 'Premium olish', href: `${BOT_URL}?start=premium`, style: 'primary', recommended: true,
+    },
+  ]
 
   return (
-    <section id="pricing" className="py-24 px-5">
-      <div className="max-w-4xl mx-auto text-center">
-        <div className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
-          style={{ background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.3)', color: '#c4b5fd' }}>
-          💰 Narxlar
-        </div>
-        <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-3">Hammaga mos narx</h2>
-        <p className="text-white/50 text-lg mb-10">Bepul boshlang, kerakli paytda yangilang</p>
+    <section id="pricing" style={{ padding: '80px 24px', background: 'rgba(255,255,255,0.02)' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto', textAlign: 'center' }}>
+        <p style={{ fontSize: 13, fontWeight: 600, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>Narxlar</p>
+        <h2 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 8 }}>Hammaga mos narx</h2>
+        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16, marginBottom: 36 }}>Bepul boshlang, kerakli paytda yangilang</p>
 
         {/* Toggle */}
-        <div className="inline-flex glass rounded-full p-1 mb-12">
-          <button onClick={() => setYearly(false)}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${!yearly ? 'text-white' : 'text-white/50'}`}
-            style={!yearly ? { background: 'linear-gradient(135deg, #6C5CE7, #a855f7)' } : {}}>
-            Oylik
-          </button>
-          <button onClick={() => setYearly(true)}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${yearly ? 'text-white' : 'text-white/50'}`}
-            style={yearly ? { background: 'linear-gradient(135deg, #6C5CE7, #a855f7)' } : {}}>
-            Yillik
-            <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">−30%</span>
-          </button>
+        <div style={{ display: 'inline-flex', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: 4, marginBottom: 40 }}>
+          {['Oylik', 'Yillik (−30%)'].map((t, i) => (
+            <button key={t} onClick={() => setYearly(i === 1)} style={{
+              padding: '8px 20px', borderRadius: 7, border: 'none', cursor: 'pointer',
+              fontSize: 13, fontWeight: 600, fontFamily: 'inherit',
+              background: (i === 1) === yearly ? 'linear-gradient(135deg, #2563eb, #1d4ed8)' : 'transparent',
+              color: (i === 1) === yearly ? 'white' : 'rgba(255,255,255,0.5)',
+              transition: 'all 0.2s',
+            }}>
+              {t}
+            </button>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* FREE */}
-          <div className="glass rounded-3xl p-8 text-left">
-            <div className="text-xs font-black uppercase tracking-widest text-white/40 mb-3">Free</div>
-            <div className="text-4xl font-black mb-1">0</div>
-            <div className="text-sm text-white/40 mb-6">so&apos;m / oy — abadiy</div>
-            <ul className="space-y-2.5 mb-8">
-              {planFeatures.free.map(f => (
-                <li key={f} className="flex items-center gap-2 text-sm text-white/70">
-                  <span className="text-green-400 font-bold">✓</span> {f}
-                </li>
-              ))}
-              {['Statistika', 'Quiz rejimi', 'Spaced repetition'].map(f => (
-                <li key={f} className="flex items-center gap-2 text-sm text-white/25">
-                  <span>✗</span> {f}
-                </li>
-              ))}
-            </ul>
-            <a href={BOT_URL} target="_blank" rel="noopener noreferrer"
-              className="block text-center py-3.5 rounded-xl text-sm font-bold transition-colors"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
-              Bepul boshlash
-            </a>
-          </div>
-
-          {/* STARTER */}
-          <div className="rounded-3xl p-8 text-left relative"
-            style={{ background: 'linear-gradient(145deg, rgba(14,165,233,0.15), rgba(99,102,241,0.1))', border: '1px solid rgba(14,165,233,0.3)' }}>
-            <div className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#7dd3fc' }}>⚡ Starter</div>
-            <div className="text-4xl font-black mb-1">{prices.starter}</div>
-            <div className="text-sm mb-6" style={{ color: '#7dd3fc' }}>
-              so&apos;m / oy{yearly && <span className="ml-2 text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">{prices.starterYear}/yil</span>}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, textAlign: 'left' }}>
+          {plans.map(p => (
+            <div key={p.name} style={{
+              background: p.recommended ? 'rgba(37,99,235,0.1)' : 'rgba(255,255,255,0.03)',
+              border: `1px solid ${p.recommended ? 'rgba(37,99,235,0.4)' : 'rgba(255,255,255,0.07)'}`,
+              borderRadius: 14, padding: 28, position: 'relative', overflow: 'hidden',
+            }}>
+              {p.recommended && (
+                <div style={{ position: 'absolute', top: 16, right: 0, background: 'linear-gradient(135deg, #2563eb, #1d4ed8)', color: 'white', fontSize: 10, fontWeight: 800, padding: '3px 14px 3px 10px', borderRadius: '100px 0 0 100px', letterSpacing: '0.05em' }}>
+                  TAVSIYA
+                </div>
+              )}
+              <div style={{ fontSize: 13, fontWeight: 700, color: p.recommended ? '#93c5fd' : 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>{p.name}</div>
+              <div style={{ fontSize: 36, fontWeight: 800, color: 'white', marginBottom: 4 }}>{p.price}</div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', marginBottom: 24 }}>{p.period}</div>
+              <ul style={{ listStyle: 'none', padding: 0, marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {p.features.map(f => (
+                  <li key={f} style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ color: '#34d399', fontWeight: 700 }}>✓</span> {f}
+                  </li>
+                ))}
+                {p.missing.map(f => (
+                  <li key={f} style={{ fontSize: 14, color: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span>✗</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <a href={p.href} target="_blank" rel="noopener noreferrer" style={{
+                display: 'block', textAlign: 'center', padding: '12px 0', borderRadius: 8,
+                fontSize: 14, fontWeight: 700, textDecoration: 'none', color: 'white',
+                background: p.style === 'primary' ? 'linear-gradient(135deg, #2563eb, #1d4ed8)'
+                  : p.style === 'blue' ? 'rgba(37,99,235,0.2)'
+                    : 'rgba(255,255,255,0.06)',
+                border: p.style === 'outline' ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                transition: 'opacity 0.2s',
+              }}>
+                {p.cta}
+              </a>
             </div>
-            <ul className="space-y-2.5 mb-8">
-              {planFeatures.starter.map(f => (
-                <li key={f} className="flex items-center gap-2 text-sm text-white/70">
-                  <span className="text-green-400 font-bold">✓</span> {f}
-                </li>
-              ))}
-              {['Spaced repetition'].map(f => (
-                <li key={f} className="flex items-center gap-2 text-sm text-white/25">
-                  <span>✗</span> {f}
-                </li>
-              ))}
-            </ul>
-            <a href={`${BOT_URL}?start=starter`} target="_blank" rel="noopener noreferrer"
-              className="block text-center py-3.5 rounded-xl text-sm font-bold text-white"
-              style={{ background: 'linear-gradient(135deg, #0ea5e9, #6366f1)' }}>
-              Starter olish
-            </a>
-          </div>
-
-          {/* PREMIUM */}
-          <div className="rounded-3xl p-8 text-left relative overflow-hidden"
-            style={{ background: 'linear-gradient(145deg, rgba(108,92,231,0.2), rgba(168,85,247,0.15))', border: '1px solid rgba(168,85,247,0.4)' }}>
-            <div className="absolute top-5 right-0 text-xs font-black text-white px-4 py-1 rounded-l-full"
-              style={{ background: 'linear-gradient(135deg, #6C5CE7, #a855f7)' }}>
-              TAVSIYA
-            </div>
-            <div className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: '#c4b5fd' }}>👑 Premium</div>
-            <div className="text-4xl font-black mb-1">{prices.premium}</div>
-            <div className="text-sm mb-6" style={{ color: '#a78bfa' }}>
-              so&apos;m / oy{yearly && <span className="ml-2 text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">{prices.premiumYear}/yil</span>}
-            </div>
-            <ul className="space-y-2.5 mb-8">
-              {planFeatures.premium.map(f => (
-                <li key={f} className="flex items-center gap-2 text-sm text-white/80">
-                  <span className="text-green-400 font-bold">✓</span> {f}
-                </li>
-              ))}
-            </ul>
-            <a href={`${BOT_URL}?start=premium`} target="_blank" rel="noopener noreferrer"
-              className="btn-grad block text-center py-3.5 rounded-xl text-sm font-bold text-white">
-              Premium olish
-            </a>
-          </div>
+          ))}
         </div>
       </div>
     </section>
   )
 }
 
+// ── FAQ ──────────────────────────────────────────────────────
 function FAQ() {
-  return (
-    <section id="faq" className="py-24 px-5" style={{ background: 'rgba(255,255,255,0.02)' }}>
-      <div className="max-w-2xl mx-auto">
-        <div className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4"
-          style={{ background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.3)', color: '#c4b5fd' }}>
-          ❓ FAQ
-        </div>
-        <h2 className="text-4xl font-extrabold tracking-tight mb-12">Ko&apos;p so&apos;raladigan savollar</h2>
+  const [open, setOpen] = useState<number | null>(null)
 
-        <div className="space-y-3">
-          {faqs.map((faq) => (
-            <details key={faq.q} className="glass rounded-2xl group">
-              <summary className="flex items-center justify-between p-5 font-semibold text-base">
+  return (
+    <section id="faq" style={{ padding: '80px 24px' }}>
+      <div style={{ maxWidth: 680, margin: '0 auto' }}>
+        <p style={{ fontSize: 13, fontWeight: 600, color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>FAQ</p>
+        <h2 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 40 }}>Ko&apos;p so&apos;raladigan savollar</h2>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {faqs.map((faq, i) => (
+            <div key={i} style={{
+              background: 'rgba(255,255,255,0.03)', border: `1px solid ${open === i ? 'rgba(37,99,235,0.3)' : 'rgba(255,255,255,0.07)'}`,
+              borderRadius: 10, overflow: 'hidden', transition: 'border-color 0.2s',
+            }}>
+              <button onClick={() => setOpen(open === i ? null : i)} style={{
+                width: '100%', padding: '16px 20px', textAlign: 'left', background: 'none',
+                border: 'none', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                fontSize: 15, fontWeight: 600, color: 'white', fontFamily: 'inherit', gap: 12,
+              }}>
                 {faq.q}
-                <span className="faq-icon text-purple-400 text-xl ml-4 flex-shrink-0">+</span>
-              </summary>
-              <div className="px-5 pb-5 text-white/60 text-sm leading-relaxed border-t border-white/5 pt-4">
-                {faq.a}
-              </div>
-            </details>
+                <span style={{ color: '#60a5fa', fontSize: 18, flexShrink: 0, transition: 'transform 0.2s', transform: open === i ? 'rotate(45deg)' : 'rotate(0)' }}>+</span>
+              </button>
+              {open === i && (
+                <div style={{ padding: '0 20px 16px', fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ paddingTop: 14 }}>{faq.a}</div>
+                </div>
+              )}
+            </div>
           ))}
         </div>
 
-        <div className="mt-10 text-center">
-          <p className="text-white/40 text-sm mb-3">Boshqa savollaringiz bormi?</p>
-          <a href={BOT_URL} target="_blank" rel="noopener noreferrer"
-            className="text-purple-400 font-bold hover:text-purple-300 transition-colors">
+        <div style={{ marginTop: 32, textAlign: 'center', fontSize: 14, color: 'rgba(255,255,255,0.4)' }}>
+          Boshqa savollar?{' '}
+          <a href={BOT_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', fontWeight: 600, textDecoration: 'none' }}>
             @memorix_uz_bot ga yozing →
           </a>
         </div>
@@ -380,26 +373,35 @@ function FAQ() {
   )
 }
 
+// ── CTA ──────────────────────────────────────────────────────
 function CTA() {
   return (
-    <section className="py-24 px-5">
-      <div className="max-w-2xl mx-auto text-center">
-        <div className="rounded-3xl p-14 relative overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, rgba(108,92,231,0.2), rgba(168,85,247,0.15))', border: '1px solid rgba(168,85,247,0.3)' }}>
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 0%, rgba(168,85,247,0.2), transparent 60%)' }}></div>
-          <div className="relative">
-            <div className="text-6xl mb-5 animate-float inline-block">🧠</div>
-            <h2 className="text-4xl font-extrabold tracking-tight mb-4">Bugundan boshlang!</h2>
-            <p className="text-white/55 text-lg mb-8 leading-relaxed">
-              O&apos;zbek tilida eng qulay flashcard ilova. AI bilan, bepul, hoziroq.
+    <section style={{ padding: '80px 24px', background: 'rgba(255,255,255,0.02)' }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+        <div style={{
+          padding: '56px 40px', borderRadius: 20, position: 'relative', overflow: 'hidden',
+          background: 'rgba(37,99,235,0.08)', border: '1px solid rgba(37,99,235,0.2)',
+        }}>
+          <div style={{ position: 'absolute', top: -60, left: '50%', transform: 'translateX(-50%)', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,99,235,0.15), transparent 70%)', filter: 'blur(30px)', pointerEvents: 'none' }}></div>
+          <div style={{ position: 'relative' }}>
+            <h2 style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 12 }}>Bugundan boshlang</h2>
+            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.5)', marginBottom: 28, lineHeight: 1.6 }}>
+              AI bilan flashcard yarating. Bepul. Telegram orqali. Hoziroq.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href={BOT_URL} target="_blank" rel="noopener noreferrer"
-                className="btn-grad text-white font-bold px-8 py-4 rounded-full text-base flex items-center gap-2 justify-center">
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href={BOT_URL} target="_blank" rel="noopener noreferrer" style={{
+                background: 'linear-gradient(135deg, #2563eb, #1d4ed8)', color: 'white',
+                fontWeight: 700, padding: '13px 26px', borderRadius: 9, textDecoration: 'none',
+                fontSize: 15, display: 'inline-flex', alignItems: 'center', gap: 8,
+                boxShadow: '0 6px 20px rgba(37,99,235,0.35)',
+              }}>
                 🚀 Telegram botni ochish
               </a>
-              <a href={APP_URL} target="_blank" rel="noopener noreferrer"
-                className="glass text-white font-semibold px-8 py-4 rounded-full text-base flex items-center gap-2 justify-center hover:bg-white/10 transition-colors">
+              <a href={APP_URL} target="_blank" rel="noopener noreferrer" style={{
+                color: 'white', fontWeight: 600, padding: '13px 26px', borderRadius: 9,
+                textDecoration: 'none', fontSize: 15,
+                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+              }}>
                 📱 Mini App
               </a>
             </div>
@@ -410,25 +412,28 @@ function CTA() {
   )
 }
 
+// ── FOOTER ──────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer className="py-10 px-5 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-      <div className="flex items-center justify-center gap-2 mb-4">
-        <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#a855f7', boxShadow: '0 0 10px #a855f7' }}></div>
-        <span className="font-extrabold">Memorix</span>
+    <footer style={{ padding: '36px 24px', borderTop: '1px solid rgba(255,255,255,0.06)', textAlign: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 16 }}>
+        <CardLogo size={22} />
+        <span style={{ fontWeight: 700, fontSize: 15 }}>Memorix</span>
       </div>
-      <div className="flex justify-center gap-6 text-sm text-white/40 mb-4">
-        <a href={BOT_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram bot</a>
-        <a href="#features" className="hover:text-white transition-colors">Xususiyatlar</a>
-        <a href="#pricing" className="hover:text-white transition-colors">Narxlar</a>
-        <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 24, flexWrap: 'wrap', marginBottom: 16 }}>
+        {[['Telegram bot', BOT_URL], ['Xususiyatlar', '#features'], ['Narxlar', '#pricing'], ['FAQ', '#faq']].map(([label, href]) => (
+          <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer"
+            style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>
+            {label}
+          </a>
+        ))}
       </div>
-      <div className="text-xs text-white/25">© 2026 Memorix. Barcha huquqlar himoyalangan.</div>
+      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)' }}>© 2026 Memorix. Barcha huquqlar himoyalangan.</div>
     </footer>
   )
 }
 
-// ── PAGE ──────────────────────────────────────────────────────
+// ── PAGE ────────────────────────────────────────────────────
 export default function Home() {
   return (
     <main>
