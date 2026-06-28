@@ -9,6 +9,13 @@ export const metadata: Metadata = {
   description: "AI yordamida inglizcha, ruscha va koreycha so'zlarni oson va tez o'rganing. Matn yoki rasm yuboring — AI o'zi flashcard yaratadi. Bepul boshlang!",
   keywords: ["flashcard o'zbek tili", "inglizcha so'z o'rganish", "AI flashcard", "telegram flashcard bot", "so'z o'rganish ilova", "memorix"],
   authors: [{ name: 'Memorix' }],
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     title: "Memorix — AI bilan so'z o'rganing",
     description: "AI yordamida inglizcha, ruscha va koreycha so'zlarni oson va tez o'rganing.",
