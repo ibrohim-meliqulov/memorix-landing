@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 const BACKEND = 'https://memorix-r9gk.onrender.com'
 
@@ -16,19 +16,18 @@ function CardLogo({ size = 28 }: { size?: number }) {
 }
 
 function AuthContent() {
-    const router = useRouter()
     const searchParams = useSearchParams()
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const token = searchParams.get('token')
-        const error = searchParams.get('error')
         if (token) {
+            // Token saqlash va to'g'ridan memorix-front ga o'tish
+            // router.push('/') ishlatmaymiz — loop bo'ladi!
             localStorage.setItem('memorix_token', token)
-            window.location.href = 'https://memorix-front.vercel.app'
+            window.location.replace('https://memorix-front.vercel.app')
         }
-        if (error) console.error('Auth xatolik:', error)
-    }, [searchParams, router])
+    }, [searchParams])
 
     function handleGoogle() {
         setLoading(true)
@@ -72,7 +71,6 @@ function AuthContent() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
                     fontFamily: 'inherit',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                    transition: 'box-shadow 0.2s',
                 }}>
                     {loading ? (
                         <div style={{ width: 20, height: 20, border: '2px solid #e2e8f0', borderTopColor: '#2563eb', borderRadius: '50%', animation: 'spin 0.7s linear infinite' }} />
