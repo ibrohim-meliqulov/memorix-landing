@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-const BACKEND = 'https://memorix-r9gk.onrender.com'
+const BACKEND = 'https://api.memorix.uz'
 
 function CardLogo({ size = 28 }: { size?: number }) {
     return (
@@ -25,7 +25,7 @@ function AuthContent() {
             // Token saqlash va to'g'ridan memorix-front ga o'tish
             // router.push('/') ishlatmaymiz — loop bo'ladi!
             localStorage.setItem('memorix_token', token)
-            window.location.replace('https://memorix-front.vercel.app')
+            window.location.replace('https://memorix.uz')
         }
     }, [searchParams])
 
